@@ -31,12 +31,15 @@ function begin(){
             height: image.height
         }
 
-        faceapi.matchDimensions(canvas,imgSize);
+        
 
         //create a canvas to draw on
 
         const canvas = faceapi.createCanvasFromMedia(image);
+        faceapi.matchDimensions(canvas,imgSize);
         container.append(canvas);
+
+        
 
         //detect faces
         const faces = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors();
@@ -49,10 +52,20 @@ function begin(){
 
         detectSize.forEach(data=>{
             const box = data.detection.box;
-            const pen = new faceapi.draw.DrawBox(box,{labe: 'face'});
+            const pen = new faceapi.draw.DrawBox(box,{label: 'faces'});
             pen.draw(canvas);
         });
 
 
      });
+}
+
+//fetching faces
+
+function fetch_faces(){
+    const names = ['J Cole','Jay Z','Kendrick Lamar','Lil Wayne','Offset','Quavo'];
+
+    return Promise.all(names.map(async name=>{
+        
+    }));
 }
