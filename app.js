@@ -23,10 +23,35 @@ function begin(){
 
         //extracting the image from the file element
         const image = await faceapi.bufferToImage(file.files[0]);
-        document.body.append(image);
+        container.append(image);
+
+        //now i will resize the canvas to match the image
+        const imgSize = {
+            width: image.width,
+            height: image.height
+        }
+
+        faceapi.matchDimensions(canvas,imgSize);
+
+        //create a canvas to draw on
+
+        const canvas = faceapi.createCanvasFromMedia(image);
+        container.append(canvas);
 
         //detect faces
         const faces = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors();
+
+        //resize detectors
+
+        const detectSize = faceapi.resizeResults(faces,imgSize);
+
+        //Draw boxes
+
+        detectSize.forEach(data=>{
+            const box = data.detection.box;
+            const pen = new faceapi.draw.DrawBox(box,{labe: 'face'});
+            pen.draw(canvas);
+        });
 
 
      });
